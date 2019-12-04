@@ -1,5 +1,4 @@
 const readline = require('readline');
-const colors = require('colors');
 
 const BattleshipGameEngine = require('./battleship-game-engine');
 
@@ -14,7 +13,7 @@ const BGEConsole = function ()
 
     const gameLoop = (question) =>
     {
-        rl.question(question, answer =>
+        rl.question(question || 'Enter coordinate to attack: '.bold, answer =>
         {
             if (answer === 'exit')
             {
@@ -29,7 +28,7 @@ const BGEConsole = function ()
                 if (remainingShips === 0)
                 {
                     console.log('Victory! All enemy ships have been destroyed.'.bgYellow.black);
-
+                    replayPrompt();
                 }
                 else if (hit)
                 {
@@ -66,7 +65,7 @@ const BGEConsole = function ()
         console.log('\nBattleships v2.0'.bold.underline.white + '\n');
         console.log('Ships with sizes 2, 3, and 4 have been placed randomly on the board.\n');
 
-        gameLoop('Enter coordinate to attack: '.bold);
+        gameLoop();
     };
 
     const parseCoordinate = str =>
@@ -83,6 +82,22 @@ const BGEConsole = function ()
 
         return { x: parseInt(x), y: parseInt(y) };
     }
+
+    const replayPrompt = () =>
+    {
+        rl.question('Do you want to play again?' + 'y/n'.italic, answer =>
+        {
+            if (answer.toLowerCase() === 'y')
+            {
+                game.restart();
+                shootPrompt();
+            }
+            else (answer.toLowerCase() === 'n')
+            {
+                rl.close();
+            }
+        });
+    };
 
     return {
         init

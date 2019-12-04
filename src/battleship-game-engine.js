@@ -52,12 +52,14 @@ const BattleshipGameEngine = function (options = {})
     const shoot = (x, y) =>
     {
         let hit = false;
+        let sunk = false;
 
         for (let ship of ships)
         {
             if (ship.hit(x, y))
             {
                 hit = true;
+                sunk = ship.sunk();
                 break;
             }
         }
@@ -67,6 +69,7 @@ const BattleshipGameEngine = function (options = {})
         return {
             hit,
             shots,
+            sunk,
             remainingShips: ships.filter(s => !s.sunk()).length
         };
     }

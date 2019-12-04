@@ -24,7 +24,7 @@ const BGEConsole = function ()
             try
             {
                 const { x, y } = parseCoordinate(answer);
-                const { hit, remainingShips } = game.shoot(x, y);
+                const { hit, sunk, remainingShips } = game.shoot(x, y);
 
                 if (remainingShips === 0)
                 {
@@ -33,11 +33,21 @@ const BGEConsole = function ()
                 }
                 else if (hit)
                 {
-                    gameLoop('You hit an enemy ship, keep shooting: '.bold)
+                    if (sunk)
+                    {
+                        console.log(`You hit and ${'sunk'.underline} an enemy ship.`);
+                    }
+                    else
+                    {
+                        console.log('You hit an enemy ship.')
+                    }
+
+                    gameLoop('Keep shooting: '.bold)
                 }
                 else
                 {
-                    gameLoop('You hit nothing but water, try again: '.bold);
+                    console.log('You hit nothing but water.');
+                    gameLoop('Try again: '.bold);
                 }
             }
             catch (e)
@@ -53,7 +63,7 @@ const BGEConsole = function ()
 
     const init = () =>
     {
-        console.log('Welcome Battleships!'.bold.underline.bgBlue.white + '\n');
+        console.log('\nBattleships v2.0'.bold.underline.white + '\n');
         console.log('Ships with sizes 2, 3, and 4 have been placed randomly on the board.\n');
 
         gameLoop('Enter coordinate to attack: '.bold);
@@ -64,7 +74,7 @@ const BGEConsole = function ()
         const coordStr = str.replace(/\s/g, '');
         const regex = /\d+,\d+/;
 
-        if (!regex.test(str))
+        if (!regex.test(coordStr))
         {
             throw new Error('Invalid coordinate');
         }

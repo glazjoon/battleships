@@ -53,6 +53,8 @@ const BattleshipGameEngine = function (options = {})
     {
         ships = [];
         shots = [];
+
+        randomize(shipSizes.map(s => new Ship(s)));
     };
 
     const shoot = (x, y) =>
